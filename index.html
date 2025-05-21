@@ -74,5 +74,68 @@
   <footer class="py-6 text-center text-sm text-gray-500 bg-gray-100">
     © 2025 Intercambio Estudiantil. Todos los derechos reservados.
   </footer>
+<script type="module">
+  // Importar SDKs desde Firebase CDN
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+  import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+
+  // const firebaseConfig = {
+  apiKey: "AIzaSyDgQsKwSbY0gdMsKkVpHSeRpt8ijoRj9n4",
+  authDomain: "roomie2-e02ad.firebaseapp.com",
+  projectId: "roomie2-e02ad",
+  storageBucket: "roomie2-e02ad.firebasestorage.app",
+  messagingSenderId: "34540243310",
+  appId: "1:34540243310:web:ce7279d191d4d7c70fd97f",
+  measurementId: "G-Q22ZK0BJLK"
+};
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+
+  // Registro
+  document.getElementById("btnRegister").addEventListener("click", async () => {
+    const email = document.getElementById("registerEmail").value;
+    const password = document.getElementById("registerPassword").value;
+    try {
+      await createUserWithEmailAndPassword(auth, email, password);
+      alert("Usuario registrado con éxito");
+    } catch (error) {
+      alert("Error en registro: " + error.message);
+    }
+  });
+
+  // Login
+  document.getElementById("btnLogin").addEventListener("click", async () => {
+    const email = document.getElementById("loginEmail").value;
+    const password = document.getElementById("loginPassword").value;
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      alert("Login exitoso");
+    } catch (error) {
+      alert("Error en login: " + error.message);
+    }
+  });
+
+  // Mostrar estado del usuario
+  onAuthStateChanged(auth, user => {
+    const status = document.getElementById("userStatus");
+    if (user) {
+      status.textContent = "Usuario logueado: " + user.email;
+    } else {
+      status.textContent = "No hay sesión activa";
+    }
+  });
+</script>
 </body>
 </html>
+<h2>Registro</h2>
+<input type="email" id="registerEmail" placeholder="Email">
+<input type="password" id="registerPassword" placeholder="Contraseña">
+<button id="btnRegister">Registrarse</button>
+
+<h2>Login</h2>
+<input type="email" id="loginEmail" placeholder="Email">
+<input type="password" id="loginPassword" placeholder="Contraseña">
+<button id="btnLogin">Iniciar sesión</button>
+
+<p id="userStatus"></p>
